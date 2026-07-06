@@ -1,0 +1,20 @@
+{
+  "name": "json-beautifier",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node node_modules/nuxt/bin/nuxt.mjs dev",
+    "build": "node node_modules/nuxt/bin/nuxt.mjs build",
+    "generate": "node node_modules/nuxt/bin/nuxt.mjs generate",
+    "preview": "node node_modules/nuxt/bin/nuxt.mjs preview"
+  },
+  "dependencies": {
+    "nuxt": "3.12.4",
+    "vue": "3.4.31"
+  },
+  "overrides": {
+    "nitropack": "2.9.7",
+    "nuxi": "3.12.0"
+  },
+  "devDependencies": {}
+}
