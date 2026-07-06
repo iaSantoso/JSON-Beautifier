@@ -147,9 +147,12 @@ onMounted(() => {
   <main class="app-shell">
     <section class="workspace">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">Nuxt JSON toolkit</p>
-          <h1>JSON Glow</h1>
+        <div class="brand-lockup">
+          <img class="brand-logo" src="/logo.png" alt="JSON Glow logo">
+          <div>
+            <p class="eyebrow">Nuxt JSON toolkit</p>
+            <h1>JSON Glow</h1>
+          </div>
         </div>
         <div class="status-pill" :class="statusClass">
           <span />
