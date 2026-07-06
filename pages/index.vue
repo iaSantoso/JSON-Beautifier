@@ -16,6 +16,11 @@ const indent = ref(2)
 const sortKeys = ref(false)
 const copied = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
+const inputEditor = ref<HTMLTextAreaElement | null>(null)
+const inputMirror = ref<HTMLElement | null>(null)
+
+const highlightedInput = computed(() => highlightJson(input.value))
+const highlightedOutput = computed(() => highlightJson(output.value))
 
 const stats = computed(() => {
   const source = output.value || input.value
@@ -35,6 +40,42 @@ function formatBytes(bytes: number) {
   const sizeIndex = Math.floor(Math.log(bytes) / Math.log(1024))
   const size = bytes / Math.pow(1024, sizeIndex)
   return `${size.toFixed(size >= 10 || sizeIndex === 0 ? 0 : 1)} ${units[sizeIndex]}`
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+function highlightJson(value: string) {
+  const tokenPattern = /"(?:\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?|\btrue\b|\bfalse\b|\bnull\b/g
+  let highlighted = ''
+  let lastIndex = 0
+
+  value.replace(tokenPattern, (match, offset: number) => {
+    const nextChunk = value.slice(offset + match.length)
+    let tokenType = 'json-number'
+
+    if (match.startsWith('"')) {
+      tokenType = /^\s*:/.test(nextChunk) ? 'json-key' : 'json-string'
+    } else if (match === 'true' || match === 'false') {
+      tokenType = 'json-boolean'
+    } else if (match === 'null') {
+      tokenType = 'json-null'
+    }
+
+    highlighted += escapeHtml(value.slice(lastIndex, offset))
+    highlighted += `<span class="${tokenType}">${escapeHtml(match)}</span>`
+    lastIndex = offset + match.length
+    return match
+  })
+
+  highlighted += escapeHtml(value.slice(lastIndex))
+  return highlighted
 }
 
 function sortObjectKeys(value: unknown): unknown {
@@ -130,6 +171,13 @@ function handleFileUpload(event: Event) {
     target.value = ''
   }
   reader.readAsText(file)
+}
+
+function syncInputHighlightScroll() {
+  if (!inputEditor.value || !inputMirror.value) return
+
+  inputMirror.value.scrollTop = inputEditor.value.scrollTop
+  inputMirror.value.scrollLeft = inputEditor.value.scrollLeft
 }
 
 watch([indent, sortKeys], () => {
@@ -230,13 +278,24 @@ onMounted(() => {
               <span>04</span>
               <span>05</span>
             </div>
-            <textarea
-              v-model="input"
-              spellcheck="false"
-              placeholder="{ &quot;hello&quot;: &quot;world&quot; }"
-              @keydown.meta.enter.prevent="beautifyJson"
-              @keydown.ctrl.enter.prevent="beautifyJson"
-            />
+            <div class="input-editor-stack">
+              <pre
+                ref="inputMirror"
+                class="json-highlight input-highlight"
+                aria-hidden="true"
+                v-html="highlightedInput"
+              />
+              <textarea
+                ref="inputEditor"
+                v-model="input"
+                class="json-input"
+                spellcheck="false"
+                placeholder="{ &quot;hello&quot;: &quot;world&quot; }"
+                @scroll="syncInputHighlightScroll"
+                @keydown.meta.enter.prevent="beautifyJson"
+                @keydown.ctrl.enter.prevent="beautifyJson"
+              />
+            </div>
           </div>
         </article>
 
@@ -259,7 +318,11 @@ onMounted(() => {
               <span>04</span>
               <span>05</span>
             </div>
-            <pre v-if="output">{{ output }}</pre>
+            <pre
+              v-if="output"
+              class="json-highlight"
+              v-html="highlightedOutput"
+            />
             <div v-else class="empty-output">
               <span>{ }</span>
               <strong>Formatted JSON will appear here</strong>
