@@ -9,18 +9,11 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/png',
-          sizes: '64x64',
-          href: '/favicon.png'
-        },
-        {
-          rel: 'icon',
-          type: 'image/svg+xml',
-          href: '/favicon.svg'
+          href: '/favicon-jb.png'
         },
         {
           rel: 'apple-touch-icon',
-          sizes: '180x180',
-          href: '/apple-touch-icon.png'
+          href: '/favicon-jb.png'
         }
       ],
       meta: [
@@ -30,7 +23,7 @@ export default defineNuxtConfig({
         },
         {
           property: 'og:image',
-          content: '/logo.png'
+          content: '/favicon-jb.png'
         },
         {
           name: 'description',

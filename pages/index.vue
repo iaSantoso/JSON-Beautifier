@@ -148,7 +148,7 @@ onMounted(() => {
     <section class="workspace">
       <header class="topbar">
         <div class="brand-lockup">
-          <img class="brand-logo" src="/logo.png" alt="JSON Glow logo">
+          <img class="brand-logo" src="/favicon-jb.png" alt="JSON Glow logo">
           <div>
             <p class="eyebrow">Nuxt JSON toolkit</p>
             <h1>JSON Glow</h1>
