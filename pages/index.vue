@@ -211,26 +211,60 @@ onMounted(() => {
       </p>
 
       <section class="editor-grid">
-        <article class="editor-panel">
+        <article class="editor-panel input-panel">
           <div class="panel-heading">
-            <h2>Input</h2>
-            <span>Paste or upload JSON</span>
+            <div class="panel-title">
+              <span class="panel-dot" />
+              <div>
+                <h2>Input</h2>
+                <span>Paste or upload JSON</span>
+              </div>
+            </div>
+            <strong class="panel-badge">Source</strong>
           </div>
-          <textarea
-            v-model="input"
-            spellcheck="false"
-            placeholder="{ &quot;hello&quot;: &quot;world&quot; }"
-            @keydown.meta.enter.prevent="beautifyJson"
-            @keydown.ctrl.enter.prevent="beautifyJson"
-          />
+          <div class="code-surface">
+            <div class="line-rail" aria-hidden="true">
+              <span>01</span>
+              <span>02</span>
+              <span>03</span>
+              <span>04</span>
+              <span>05</span>
+            </div>
+            <textarea
+              v-model="input"
+              spellcheck="false"
+              placeholder="{ &quot;hello&quot;: &quot;world&quot; }"
+              @keydown.meta.enter.prevent="beautifyJson"
+              @keydown.ctrl.enter.prevent="beautifyJson"
+            />
+          </div>
         </article>
 
         <article class="editor-panel output-panel">
           <div class="panel-heading">
-            <h2>Output</h2>
-            <span>Formatted result</span>
+            <div class="panel-title">
+              <span class="panel-dot" />
+              <div>
+                <h2>Output</h2>
+                <span>Formatted result</span>
+              </div>
+            </div>
+            <strong class="panel-badge">Pretty</strong>
           </div>
-          <pre>{{ output }}</pre>
+          <div class="code-surface">
+            <div class="line-rail" aria-hidden="true">
+              <span>01</span>
+              <span>02</span>
+              <span>03</span>
+              <span>04</span>
+              <span>05</span>
+            </div>
+            <pre v-if="output">{{ output }}</pre>
+            <div v-else class="empty-output">
+              <span>{ }</span>
+              <strong>Formatted JSON will appear here</strong>
+            </div>
+          </div>
         </article>
       </section>
 

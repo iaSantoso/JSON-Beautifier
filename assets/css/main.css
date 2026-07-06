@@ -222,15 +222,38 @@ h1 {
 }
 
 .editor-panel {
+  position: relative;
   min-height: 580px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-radius: 8px;
-  background: var(--panel-strong);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), transparent 32%),
+    var(--panel-strong);
+}
+
+.editor-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(85, 224, 198, 0.26), transparent 34%, rgba(255, 209, 102, 0.14));
+  opacity: 0.45;
+}
+
+.input-panel {
+  border-color: rgba(85, 224, 198, 0.34);
+}
+
+.output-panel {
+  border-color: rgba(255, 209, 102, 0.3);
 }
 
 .panel-heading {
+  position: relative;
+  z-index: 1;
   min-height: 64px;
   display: flex;
   align-items: center;
@@ -238,16 +261,86 @@ h1 {
   gap: 14px;
   border-bottom: 1px solid var(--line);
   padding: 0 18px;
+  background: rgba(8, 13, 18, 0.34);
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.panel-dot {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 22px rgba(85, 224, 198, 0.74);
+}
+
+.output-panel .panel-dot {
+  background: var(--warning);
+  box-shadow: 0 0 22px rgba(255, 209, 102, 0.66);
 }
 
 .panel-heading h2 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.1;
 }
 
 .panel-heading span {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.panel-badge {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #06100e;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.output-panel .panel-badge {
+  color: #191104;
+  background: linear-gradient(135deg, var(--warning), #ff8f70);
+}
+
+.code-surface {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  background:
+    radial-gradient(circle at 78% 0%, rgba(85, 224, 198, 0.08), transparent 22rem),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035), transparent 35%);
+}
+
+.output-panel .code-surface {
+  background:
+    radial-gradient(circle at 22% 0%, rgba(255, 209, 102, 0.08), transparent 22rem),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035), transparent 35%);
+}
+
+.line-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 22px 13px;
+  color: rgba(157, 172, 188, 0.58);
+  background: rgba(8, 13, 18, 0.28);
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  text-align: right;
+  user-select: none;
 }
 
 textarea,
@@ -257,7 +350,7 @@ pre {
   margin: 0;
   border: 0;
   outline: 0;
-  padding: 20px;
+  padding: 20px 22px;
   color: #e8fff9;
   background:
     linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
@@ -286,6 +379,36 @@ pre {
 
 .output-panel pre {
   color: #d9ebff;
+}
+
+.empty-output {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-output span {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(255, 209, 102, 0.24);
+  border-radius: 8px;
+  color: var(--warning);
+  background: rgba(255, 209, 102, 0.08);
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.6rem;
+}
+
+.empty-output strong {
+  color: #d9ebff;
+  font-size: 0.95rem;
 }
 
 .stats-row {
@@ -385,12 +508,25 @@ pre {
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
+  }
+
+  .panel-badge {
+    display: none;
+  }
+
+  .code-surface {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .line-rail {
+    padding: 17px 8px;
+    font-size: 0.68rem;
   }
 
   textarea,
   pre {
-    padding: 16px;
+    padding: 16px 14px;
     font-size: 0.86rem;
   }
 }
